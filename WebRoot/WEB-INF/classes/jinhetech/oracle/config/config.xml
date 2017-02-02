@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 原则:生成不在于多,在于精准,不在于多,在于规范,所以不要依赖本生成器生成个性化定制东西,虽然可以实现,但这并不是初衷,初衷有两个：1.统一代码风格,规范代码。2.提高开发人员工作效率,将更多的东西放在业务和定制开发上  -->
+<config>
+	<!-- 填申报表模块 -->
+	<module id="tsbb" name="产地检疫_填申报表模块" namespace="jinhetech.officer.cdjy" author="Limengjun">
+		<entitys id="entity" name="实体类">  
+	  		<entity id="Cdjysbb" tablename="JY_CDJY_CDJYSBB" comment="产地检疫申报表">
+	  			<!-- 非比配项,如果有外键引用,则与数据库外键配置相对应,并取交集,交集外的将按照简单数据类型处理 -->
+	  			<foreigns>
+	  				<foreign class="jinhetech.base.yogurt.organization.entity.OrgTable"></foreign>
+	  				<foreign class="jinhetech.base.yogurt.user.entity.User"></foreign>
+	  				<foreign class="jinhetech.officer.cdjy.tsbb.entity.CdjyWorkflow"></foreign>
+	  				<foreign class="jinhetech.common.dic.entity.DicCrop"></foreign>
+	  			</foreigns>
+	  		</entity>
+	  		<entity id="Cdjysbbmx" tablename="JY_CDJY_CDJYSBBMX" comment="产地检疫申报表明细（品种）" ></entity>
+	  		<entity id="CdjyWorkflow" tablename="JY_CDJY_WORKFLOW" comment="产地检疫工作流表" ></entity>
+	  	</entitys>
+	  	<daos id="dao" name="dao层">
+	  		<!-- 只支持最基本最常用且通用规范的三种查询,其中Foreign和Unique查询根据需要可以定义多个,对于jpa增删改都直接调用自带方法即可,另外一些与业务联系紧密的特殊查询需要手动根据业务逻辑完成 -->
+	  		<dao id="JpaCdjysbbDao" ref="Cdjysbb" type="jpa">
+	  			<methods>
+		  			<method type="query" by="Primary"></method>
+		  			<method type="query" by="Foreign" column="SLJG"></method>
+<!-- 		  		<method type="query" by="Foreign" column="WORKFLOW_ID"></method> -->
+					<method type="query" by="Unique" column="WORKFLOW_ID"></method>
+					<method type="query" by="Common" column="SBDWLXDH"></method>
+	  			</methods>
+	  		</dao>
+	  		<dao id="JdbcCdjysbbDao" ref="Cdjysbb" type="jdbc"></dao>
+	  	</daos>
+	  	<vos id="vo" name="Vo层">
+	  		<vo id="TsbbVo" name="增删改Vo">
+	  			<fields>
+		  			<field type="Object" ref="CdjyWorkflow"></field>
+		  			<field type="Object" ref="Cdjysbb"></field>
+		  			<field type="List" ref="Cdjysbbmx"></field>
+		  			<field type="Object" ref="Cdjytjdcb"></field>
+		  		</fields>
+	  		</vo>
+	  		<vo id="QueryVo" name="查询Vo">
+	  			<fields>
+		  			<field type="Simple" ref="Cdjysbb" column="ZWBM"></field>
+		  			<field type="Simple" ref="Cdjysbb" column="SCRQKS"></field>
+	  			</fields>
+	  		</vo>
+	  	</vos>
+  	</module>
+  	<!-- 田间调查模块 -->
+	<module id="tjdc" name="产地检疫_田间调查模块" namespace="jinhetech.officer.cdjy" author="Limengjun">
+		<entitys id="entity" name="实体类">
+	  		<entity id="Cdjytjdcb" tablename="JY_CDJY_CDJYTJDCB" comment="产地检疫田间调查表" ></entity>
+	  		<entity id="CdjytjdcbHdcl" tablename="JY_CDJY_CDJYTJDCB_HDCL" comment="产地检疫田间调查表明细（核定产量）" ></entity>
+	  		<entity id="CdjytjdcbYhsw" tablename="JY_CDJY_CDJYTJDCB_YHSW" comment="产地检疫田间调查表明细（有害生物信息）" ></entity>
+	  	</entitys>
+  	</module>
+</config>
+
+
